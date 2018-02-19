@@ -1,0 +1,10 @@
+{% for day, courses in planning.items %}
+   {{ day }} {{ courses |length }} {{ courses }}
+    <br/>
+
+{% endfor %}
+
+{% for key, value in final_courses.items %}
+    {{ key }} {{ value }}
+    <br/>
+{% endfor %}
