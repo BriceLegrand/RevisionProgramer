@@ -1,3 +1,4 @@
+from collections import OrderedDict
 from datetime import datetime
 from django.shortcuts import render
 import datetime as dt
@@ -7,7 +8,7 @@ from revision.program_manager import ProgramManager
 
 
 def home(request):
-    planning = {}
+    planning = OrderedDict()
     today = datetime.now()
     program_manager = ProgramManager()
     families = {}
