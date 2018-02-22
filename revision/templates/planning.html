@@ -1,5 +1,9 @@
 {% for day, courses in planning.items %}
-   {{ day }} {{ courses |length }} {{ courses }}
+   {{ day }} {{ courses |length }} --
+    {%  for course in courses %}
+        {{ course }} {{ course.book }} --
+    {%  endfor %}
+
     <br/>
 
 {% endfor %}

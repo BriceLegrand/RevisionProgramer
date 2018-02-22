@@ -7,6 +7,7 @@ from revision.models import Course, AvailableTime, CourseSeen
 @admin.register(Course)
 class CourseAdmin(admin.ModelAdmin):
     list_display = ('item', 'name', 'seen', 'family', 'book', 'duration', 'started_learning')
+    search_fields = ['item', 'name']
 
 
 @admin.register(AvailableTime)

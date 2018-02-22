@@ -21,7 +21,7 @@ DIFFICULTIES = (("EASY PEASY", "Easy Peasy"), ("SO SO", "So so"), ("DIFFICULT", 
 class Course(models.Model):
     started_learning = models.BooleanField(default=False)
     weight = models.FloatField(default=0)
-    name = models.CharField(max_length=100)
+    name = models.CharField(max_length=100, null=True, blank=True)
     duration = models.DurationField(default=timedelta())
     comment = models.TextField(default="", null=True, blank=True)
     item = models.IntegerField(null=True, blank=True)
