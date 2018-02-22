@@ -32,6 +32,7 @@ class ProgramManager(object):
                 last_seen = datetime(1970, 1, 1)
                 seen = 0
             self.courses_tracking[course.id] = {"last_seen": last_seen, "seen": seen}
+        print(self.courses_tracking[74])
 
     def is_it_ok_to_take_this_course(self, available_time, course):
         seen = self.courses_tracking[course.id]["seen"]
@@ -50,8 +51,10 @@ class ProgramManager(object):
         for ordered_diff in ordered_diffs:
             late_courses = differences[ordered_diff]
             for late_course in late_courses:
+
                 # if available_time.total_seconds() > 0:
                 if self.is_it_ok_to_take_this_course(available_time, late_course):
+
                     available_time -= late_course.duration * math.pow(self.DURATION_DIMINUTION, min(self.courses_tracking[late_course.id]["seen"] + 1, 4))
                     picked_courses.append(late_course)
                     if simulate:
@@ -76,7 +79,7 @@ class ProgramManager(object):
             try:
                 courses = sorted_families[picked_family]
                 course = courses[indexes[picked_family]]
-                while course.started_learning == True:
+                while self.courses_tracking[course.id]["seen"] != 0:
                     indexes[picked_family] += 1
                     course = courses[indexes[picked_family]]
                 if available_time.total_seconds() > 0:
