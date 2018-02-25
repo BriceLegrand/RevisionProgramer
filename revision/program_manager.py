@@ -29,10 +29,9 @@ class ProgramManager(object):
                 last_seen = seen.order_by("-date")[0].date
                 seen = seen.count()
             else:
-                last_seen = datetime(1970, 1, 1)
+                last_seen = datetime(1970, 1, 1).date()
                 seen = 0
             self.courses_tracking[course.id] = {"last_seen": last_seen, "seen": seen}
-        print(self.courses_tracking[74])
 
     def is_it_ok_to_take_this_course(self, available_time, course):
         seen = self.courses_tracking[course.id]["seen"]
@@ -101,15 +100,16 @@ class ProgramManager(object):
         differences = {}
         for family in families.values():
             for course in family.values():
-                if not course.started_learning:
+                if self.courses_tracking[course.id]["seen"] == 0:
                     continue
 
-                # print(seen, course.id)
                 coeff = self.coeffs[self.courses_tracking[course.id]["seen"]]
                 interval = self.intervals[course.difficulty][self.courses_tracking[course.id]["seen"]]
                 last_seen = self.courses_tracking[course.id]["last_seen"]
                 diff = math.ceil(
-                    (today - last_seen - dt.timedelta(days=interval)).total_seconds() / float(coeff))
+                    (today -
+                     last_seen -
+                     dt.timedelta(days=interval)).total_seconds() / float(coeff))
                 if diff >= 0:
                     if diff not in differences:
                         differences[diff] = [course]
