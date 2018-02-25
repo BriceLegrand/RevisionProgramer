@@ -9,7 +9,7 @@ from revision.program_manager import ProgramManager
 
 def home(request):
     planning = OrderedDict()
-    today = datetime.now()
+    today = datetime.now().date()
     program_manager = ProgramManager()
     families = {}
     final_courses = []
@@ -20,7 +20,7 @@ def home(request):
         for course in family_courses:
             families[family[0]][course.id] = course
 
-    for i in range(390):
+    for i in range(4):
         courses = program_manager.get_most_important_courses(today, families, simulate=True)
         planning[today] = courses
         today += dt.timedelta(days=1)
