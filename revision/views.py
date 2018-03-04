@@ -20,7 +20,7 @@ def home(request):
         for course in family_courses:
             families[family[0]][course.id] = course
 
-    for i in range(4):
+    for i in range(200):
         courses = program_manager.get_most_important_courses(today, families, simulate=True)
         planning[today] = courses
         today += dt.timedelta(days=1)
