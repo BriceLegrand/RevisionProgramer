@@ -1,13 +1,15 @@
 from collections import OrderedDict
 from datetime import datetime
-from django.shortcuts import render
+from django.shortcuts import render, render_to_response
 import datetime as dt
 # Create your views here.
+from django.template import RequestContext
+
 from revision.models import Course, FAMILIES
 from revision.program_manager import ProgramManager
 
 
-def home(request):
+def planning(request):
     planning = OrderedDict()
     today = datetime.now().date()
     program_manager = ProgramManager()
@@ -33,3 +35,7 @@ def home(request):
             nb_time_seen[course_seen.course] += 1
 
     return render(request, 'planning.html', {"planning": planning, "final_courses": nb_time_seen})
+
+def home(request):
+    return render(request, 'home.html')
+

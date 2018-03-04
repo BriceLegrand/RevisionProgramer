@@ -30,7 +30,7 @@ class Course(models.Model):
     difficulty = models.CharField(max_length=50, choices=DIFFICULTIES, null=True, blank=True)
 
     def __str__(self):
-        return "%s%s" % (self.name, '' if self.item is None else self.item)
+        return "%s %s" % ('' if self.name is None else self.name, '' if self.item is None else self.item)
 
     def seen(self):
         return CourseSeen.objects.filter(course=self).count()

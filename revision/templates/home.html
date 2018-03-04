@@ -1,0 +1,22 @@
+
+<!DOCTYPE html>
+
+{% load bootstrap3 %}
+{% bootstrap_css %}
+{% bootstrap_javascript %}
+
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Home</title>
+
+    </head>
+    <body>
+    <div class="alert alert-success">
+        <h2> Welcome <strong> {{ user.get_username }} </strong> </h2>
+    </div>
+
+    <div> <a class="btn btn-lg btn-success" href="/admin"> Manage courses</a>
+    <a class="btn btn-lg btn-info" href="/revision"> View planning</a>  </div>
+    </body>
+</html>
