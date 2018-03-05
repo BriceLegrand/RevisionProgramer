@@ -53,14 +53,12 @@ class ProgramManager(object):
 
                 # if available_time.total_seconds() > 0:
                 if self.is_it_ok_to_take_this_course(available_time, late_course):
-
                     available_time -= late_course.duration * math.pow(self.DURATION_DIMINUTION, min(self.courses_tracking[late_course.id]["seen"] + 1, 4))
                     picked_courses.append(late_course)
                     if simulate:
                         late_course.simulate_this_course_is_seen(today_date, self.courses_seen)
                         self.courses_tracking[late_course.id]["last_seen"] = today_date
                         self.courses_tracking[late_course.id]["seen"] += 1
-
         index_family = int(today_date.strftime("%Y%m%d")) % 6
 
         stopped_families = []
@@ -70,7 +68,7 @@ class ProgramManager(object):
             indexes[family[0]] = 0
             sorted_families[family[0]] = sorted(families[family[0]].values(), key=lambda x: x.difficulty == "REALLY DIFFICULT",
                              reverse=True)
-        while available_time.total_seconds() > 0 and len(stopped_families) < 6:
+        while available_time.total_seconds() > 1800 and len(stopped_families) < 6:
             picked_family = FAMILIES[index_family % 6][0]
             if picked_family in stopped_families:
                 index_family += 1

@@ -22,17 +22,16 @@ def planning(request):
         for course in family_courses:
             families[family[0]][course.id] = course
 
-    for i in range(200):
+    targetDate = datetime.date(datetime(2019,3,18))
+
+    while today <= targetDate:
         courses = program_manager.get_most_important_courses(today, families, simulate=True)
         planning[today] = courses
         today += dt.timedelta(days=1)
 
-    nb_time_seen = {}
+    nb_time_seen = {course: 0 for course in Course.objects.all()}
     for course_seen in program_manager.courses_seen:
-        if course_seen.course not in nb_time_seen:
-            nb_time_seen[course_seen.course] = 1
-        else:
-            nb_time_seen[course_seen.course] += 1
+        nb_time_seen[course_seen.course] += 1
 
     return render(request, 'planning.html', {"planning": planning, "final_courses": nb_time_seen})
 
