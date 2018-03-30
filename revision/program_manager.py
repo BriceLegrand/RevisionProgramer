@@ -20,11 +20,12 @@ class ProgramManager(object):
         }
 
         self.coeffs = [1, 2, 3, 5, 10, 15, 15, 15, 15, 15, 15]
-        self.DURATION_DIMINUTION = 0.67
-        self.courses_seen = list(CourseSeen.objects.all())
+        # self.courses_seen = list(CourseSeen.objects.all())
+        self.courses_seen = list(CourseSeen.objects.exclude(date=datetime.now().date()))
         self.courses_tracking = {}
         for course in Course.objects.all():
-            seen = CourseSeen.objects.filter(course=course)
+            seen = CourseSeen.objects.filter(course=course).exclude(date=datetime.now().date())
+            # seen = CourseSeen.objects.filter(course=course)
             if seen.count() != 0:
                 last_seen = seen.order_by("-date")[0].date
                 seen = seen.count()
@@ -35,7 +36,7 @@ class ProgramManager(object):
 
     def is_it_ok_to_take_this_course(self, available_time, course):
         seen = self.courses_tracking[course.id]["seen"]
-        course_duration = course.duration * math.pow(self.DURATION_DIMINUTION, min(seen + 1, 4))
+        course_duration = course.get_current_duration(seen)
         return available_time - course_duration >= dt.timedelta(0) or (
                 available_time - course_duration > dt.timedelta(minutes=-30) and available_time > dt.timedelta(
             minutes=60))
@@ -53,7 +54,7 @@ class ProgramManager(object):
 
                 # if available_time.total_seconds() > 0:
                 if self.is_it_ok_to_take_this_course(available_time, late_course):
-                    available_time -= late_course.duration * math.pow(self.DURATION_DIMINUTION, min(self.courses_tracking[late_course.id]["seen"] + 1, 4))
+                    available_time -= late_course.get_current_duration(self.courses_tracking[late_course.id]["seen"])
                     picked_courses.append(late_course)
                     if simulate:
                         late_course.simulate_this_course_is_seen(today_date, self.courses_seen)

@@ -1,3 +1,5 @@
+import math
+
 import django
 from django.db import models
 from django.db.models import CASCADE
@@ -16,6 +18,8 @@ FAMILIES = (
 BOOKS = (("CHIR_PARO", "CHIR_PARO"), ("PEDO_ORTHO", "PEDO_ORTHO"), ("OCE_PROTHESE", "OCE_PROTHESE"))
 
 DIFFICULTIES = (("EASY PEASY", "Easy Peasy"), ("SO SO", "So so"), ("DIFFICULT", "Difficult"), ("REALLY DIFFICULT", "Really Difficult"))
+
+DURATION_DIMINUTION = 0.67
 
 
 class Course(models.Model):
@@ -37,6 +41,13 @@ class Course(models.Model):
 
     def get_planning_text(self):
         return "{} - ({}) - {}".format(str(self), self.seen(), self.family.capitalize())
+
+    def get_current_duration(self, seen):
+        return self.duration * math.pow(DURATION_DIMINUTION,
+                                        min(seen + 1, 4))
+
+    def is_last_seen_today(self, today=datetime.now().date()):
+        return CourseSeen.objects.filter(course=self).order_by("-date")[0].date == today
 
     def simulate_this_course_is_seen(self, today_date, courses):
         self.started_learning = True
