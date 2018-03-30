@@ -47,7 +47,10 @@ class Course(models.Model):
                                         min(seen + 1, 4))
 
     def is_last_seen_today(self, today=datetime.now().date()):
-        return CourseSeen.objects.filter(course=self).order_by("-date")[0].date == today
+        last_seen = CourseSeen.objects.filter(course=self).order_by("-date")
+        if len(last_seen) == 0:
+            return False
+        return last_seen[0].date == today
 
     def simulate_this_course_is_seen(self, today_date, courses):
         self.started_learning = True
