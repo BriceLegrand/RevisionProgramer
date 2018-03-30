@@ -25,18 +25,18 @@ def planning(request):
 
     targetDate = datetime.date(datetime(2019,3,18))
     events = []
-
+    first_day = True
     while today <= targetDate:
         courses = program_manager.get_most_important_courses(today, families, simulate=True)
         for course in courses:
-            if course.is_last_seen_today(today):
+            if first_day and course.is_last_seen_today(today):
                 class_name = "seenToday"
             elif course.seen() == 0:
                 class_name = "new"
             else:
                 class_name = "revision"
-
             events.append({"start": str(today), "title": course.get_planning_text(),  "className": class_name})
+        first_day = False
 
         planning[today] = courses
         today += dt.timedelta(days=1)
