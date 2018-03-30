@@ -1,3 +1,4 @@
+import json
 from collections import OrderedDict
 from datetime import datetime
 from django.shortcuts import render, render_to_response
@@ -23,9 +24,14 @@ def planning(request):
             families[family[0]][course.id] = course
 
     targetDate = datetime.date(datetime(2019,3,18))
+    events = []
 
     while today <= targetDate:
         courses = program_manager.get_most_important_courses(today, families, simulate=True)
+        for course in courses:
+            seen = course.seen()
+            events.append({"start": str(today), "title": course.get_planning_text(),  "className": "new" if seen == 0 else "revision"})
+
         planning[today] = courses
         today += dt.timedelta(days=1)
 
@@ -33,7 +39,8 @@ def planning(request):
     for course_seen in program_manager.courses_seen:
         nb_time_seen[course_seen.course] += 1
 
-    return render(request, 'planning.html', {"planning": planning, "final_courses": nb_time_seen})
+
+    return render(request, 'planning.html', {"final_courses": nb_time_seen, 'events': json.dumps(events)})
 
 def home(request):
     return render(request, 'home.html')

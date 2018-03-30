@@ -1,0 +1,12 @@
+#calendar {
+  max-width: 1300px;
+  margin: 40px auto;
+}
+
+.new {
+    background-color: #0b6b80;
+}
+
+.revision {
+    background-color: #a88bff;
+}
