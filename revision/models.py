@@ -36,7 +36,7 @@ class Course(models.Model):
         return CourseSeen.objects.filter(course=self).count()
 
     def get_planning_text(self):
-        return "{} - {}  ({})".format(str(self), self.family.capitalize(), self.seen())
+        return "{} - ({}) - {}".format(str(self), self.seen(), self.family.capitalize())
 
     def simulate_this_course_is_seen(self, today_date, courses):
         self.started_learning = True
