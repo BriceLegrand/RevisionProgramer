@@ -34,31 +34,29 @@ def populate_courses():
         print(c.difficulty)
         c.save()
         print(c)
-#
-# def populate_days():
-#     from datetime import datetime
-#     from datetime import timedelta
-#
-#     from revision.models import AvailableTime
-#
-#     av = [0, 2, 0, 2, 7, 6, 6]
-#     today = datetime(2018, 2, 12)
-#     for i in range(400):
-#         timeAv = AvailableTime()
-#         timeAv.duration = timedelta(hours=av[i % 7])
-#         timeAv.date = today
-#         today = today + timedelta(days=1)
-#         timeAv.save()
 
+def populate_days():
+    from datetime import datetime
+    from datetime import timedelta
+    from revision.models import AvailableTime
+    j = 8
+    av = [3, 2, 3, 0, 0, j, 4]
+    today = datetime(2018, 8, 28)
+    for i in range(280):
+        timeAv = AvailableTime()
+        j = 8 if i % 7 == 5 else 6
+        av[5] = j
+        timeAv.duration = timedelta(hours=av[(i +1)% 7])
+        timeAv.date = today
+        today = today + timedelta(days=1)
+        timeAv.save()
+        # print(timeAv)
 
 def update_summer_days():
     days = {0: 2, 1: 8, 2:2, 3:8, 4:8, 5:2, 6:2}
-    print("cuuuuuuuuuuuuuuuuuu")
     dates = AvailableTime.objects.filter(date__gte="2018-06-01").filter(date__lte="2018-07-31")
-    print(dates)
     for date in dates:
         date.duration = datetime.timedelta(hours=days[date.date.weekday()])
-        print(date.duration)
         date.save()
     dates = AvailableTime.objects.filter(date__gte="2018-08-01").filter(date__lte="2018-08-31")
     for date in dates:
